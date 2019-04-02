@@ -1,31 +1,4 @@
-﻿  main.cpp
-c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\xstddef(141): error C2678: binary '<': no operator found which takes a left-hand operand of type 'const _Ty' (or there is no acceptable conversion)
-          with
-          [
-              _Ty=Job
-          ]
-  c:\users\khleys\source\repos\csc305_lab3\csc305_lab3\job.h(75): note: could be 'bool Job::operator <(const Job &)'
-  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\system_error(319): note: or       'bool std::operator <(const std::error_condition &,const std::error_condition &) noexcept'
-  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\system_error(312): note: or       'bool std::operator <(const std::error_code &,const std::error_code &) noexcept'
-  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\xstddef(141): note: while trying to match the argument list '(const _Ty, const _Ty)'
-          with
-          [
-              _Ty=Job
-          ]
-  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\xstddef(140): note: while compiling class template member function 'bool std::less<Job>::operator ()(const _Ty &,const _Ty &) const'
-          with
-          [
-              _Ty=Job
-          ]
-  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\xutility(1110): note: see reference to function template instantiation 'bool std::less<Job>::operator ()(const _Ty &,const _Ty &) const' being compiled
-          with
-          [
-              _Ty=Job
-          ]
-  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\type_traits(1049): note: see reference to class template instantiation 'std::less<Job>' being compiled
-  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\queue(247): note: see reference to variable template 'const bool is_nothrow_default_constructible_v<std::less<Job> >' being compiled
-  c:\users\khleys\source\repos\csc305_lab3\csc305_lab3\main.cpp(25): note: see reference to class template instantiation 'std::priority_queue<Job,std::vector<_Ty,std::allocator<_Ty>>,std::less<_Ty>>' being compiled
-          with
-          [
-              _Ty=Job
-          ]
+﻿  priority.cpp
+c:\users\khleys\source\repos\csc305_lab3\csc305_lab3\priority.cpp(152): warning C4018: '<': signed/unsigned mismatch
+c:\users\khleys\source\repos\csc305_lab3\csc305_lab3\priority.cpp(168): warning C4018: '<': signed/unsigned mismatch
+  CSC305_Lab3.vcxproj -> C:\Users\Khleys\source\repos\CSC305_Lab3\Debug\CSC305_Lab3.exe

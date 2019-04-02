@@ -9,7 +9,9 @@ class Job {
 	int remainingExecutionTime;
 	bool jobComplete; //1 = job completed, 0 = need to execute
 
-	int terminationTime;
+	int turnaroundTime;
+
+	void calculateTurnaroundTime(int);
 
 public:
 	Job();
@@ -19,14 +21,17 @@ public:
 	int getPriority();
 	int getExecutionTime();
 	int getRemainingExecutionTime();
-	void decrRemainingExecutionTime();
-	//POST: remainingExecutionTime -= 1. If remainingExecutionTime = 0, jobComplete flag = true.
+	void decrRemainingExecutionTime(int);
+	//Method must take int variable which is assumed to be clock. In this way, we will have process termination time.
+	//POST: remainingExecutionTime -= 1. If remainingExecutionTime = 0, jobComplete flag = true. Additionally, calculates TA time.
 
-	int getTerminationTime();
+	int getTurnaroundTime();
 	bool isJobComplete();
-
-	bool operator <(const Job&);
 };
+
+void Job::calculateTurnaroundTime(int terminationTime) {
+	turnaroundTime = terminationTime - arrivalTime;
+}
 
 Job::Job() {
 	//Intentionally blank
@@ -35,6 +40,7 @@ Job::Job() {
 Job::Job(std::string jobName, int arrivalTime, int priority, int executionTime)
 	:jobName(jobName), arrivalTime(arrivalTime), priority(priority), executionTime(executionTime), remainingExecutionTime(executionTime)
 {
+	jobComplete = false;
 }
 
 std::string Job::getJobName() {
@@ -57,15 +63,17 @@ int Job::getRemainingExecutionTime() {
 	return remainingExecutionTime;
 }
 
-void Job::decrRemainingExecutionTime() {
+void Job::decrRemainingExecutionTime(int currentTime) {
 	remainingExecutionTime--;
 
-	if (remainingExecutionTime == 0)
+	if (remainingExecutionTime == 0) {
 		jobComplete = true;
+		calculateTurnaroundTime(currentTime+1); //Sending over termination time. Must be fixed by + 1 because that is true termination time.
+	}
 }
 
-int Job::getTerminationTime() {
-	return terminationTime;
+int Job::getTurnaroundTime() {
+	return turnaroundTime;
 }
 
 bool Job::isJobComplete() {
