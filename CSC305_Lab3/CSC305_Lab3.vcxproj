@@ -115,13 +115,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="priority.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="Job.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="input_file.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="fcfs.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

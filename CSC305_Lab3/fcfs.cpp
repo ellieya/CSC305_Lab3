@@ -12,7 +12,6 @@ void populateJobVectorAndQueueFromFile(vector<Job>& jobVector, priority_queue<pa
 
 //For debugging
 void printJobVector(vector<Job> jobVector);
-void printPriorityQueue(priority_queue<pair<int, int>> jobArrivalQueue, vector<Job> jobVector);
 
 //Final outputs
 void printJobDataTable(vector<Job> jobVector);
@@ -45,11 +44,11 @@ int main() {
 	while (!done) {
 
 		/* DEBUGGING */
-		cout << "Clock: " << clock << ". ";
-		if (workingJob) {
-			cout << "Current Job: " << currentWorkingJob.getJobName() << ". Time left: " << currentWorkingJob.getRemainingExecutionTime() << ".";
-		}
-		cout << endl;
+		//cout << "Clock: " << clock << ". ";
+		//if (workingJob) {
+		//	cout << "Current Job: " << currentWorkingJob.getJobName() << ". Time left: " << currentWorkingJob.getRemainingExecutionTime() << ".";
+		//}
+		//cout << endl;
 
 		/* ARRIVAL */
 		//Check if queue is empty to avoid error trying to get front
@@ -57,7 +56,7 @@ int main() {
 			//Is there an arrival?
 			if (jobArrivalQueue.top().first == (-clock)) {
 				//Push priority value and list position into priorityJobsQueue
-				waitingJobsQueue.push({ jobVector[jobArrivalQueue.top().second].getPriority(), jobArrivalQueue.top().second });
+				waitingJobsQueue.push(jobArrivalQueue.top().second);
 				//Pop from jobArrivalQueue
 				jobArrivalQueue.pop();
 			}
@@ -66,28 +65,12 @@ int main() {
 		//Is there any working job?
 		if (!workingJob) {
 			//If there is no working job, then make currentWorkingJob equal to waitingJobsQueue's top and pop it from queue
-			currentWorkingJobIndex = waitingJobsQueue.top().second;
+			currentWorkingJobIndex = waitingJobsQueue.front();
 			currentWorkingJob = jobVector[currentWorkingJobIndex];
 			workingJob = true;
 			waitingJobsQueue.pop();
 			//Update string queue...
 			jobOrder.push(currentWorkingJob.getJobName());
-		} //Otherwise, there is a working job...
-		else {
-			//Check if queue is empty to avoid error trying to get front
-			if (!waitingJobsQueue.empty()) {
-				//Is there an item in the queue with a higher priority value?
-				if (currentWorkingJob.getPriority() < waitingJobsQueue.top().first) {
-					//...then update the currentWorkingJob in the vector, push "currentWorkingJob" back onto the queue, and replace current job with the higher priority job.
-					jobVector[currentWorkingJobIndex] = currentWorkingJob;
-					waitingJobsQueue.push({ currentWorkingJob.getPriority(), currentWorkingJobIndex });
-					currentWorkingJobIndex = waitingJobsQueue.top().second;
-					currentWorkingJob = jobVector[currentWorkingJobIndex];
-					waitingJobsQueue.pop();
-					//Update string queue...
-					jobOrder.push(currentWorkingJob.getJobName());
-				}
-			}
 		}
 
 		//Work on current job
@@ -108,7 +91,7 @@ int main() {
 			done = true;
 	}
 
-	cout << "PRIORITY ALGORITHM" << endl;
+	cout << "FIRST-COME FIRST-SERVE ALGORITHM" << endl;
 	printJobDataTable(jobVector);
 	cout << endl;
 	printJobOrder(jobOrder);
@@ -149,14 +132,6 @@ void printJobVector(vector<Job> jobList)
 {
 	for (int i = 0; i < jobList.size(); i++) {
 		cout << jobList[i].getJobName() << endl;
-	}
-}
-
-void printPriorityQueue(priority_queue<pair<int, int>> jobArrivalQueue, vector<Job> jobVector)
-{
-	while (!jobArrivalQueue.empty()) {
-		cout << jobArrivalQueue.top().first << " " << jobVector[jobArrivalQueue.top().second].getJobName() << endl;
-		jobArrivalQueue.pop();
 	}
 }
 
