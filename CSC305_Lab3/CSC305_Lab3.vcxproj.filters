@@ -25,7 +25,7 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="fcfs.cpp">
+    <ClCompile Include="sjn.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

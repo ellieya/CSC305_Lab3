@@ -6,6 +6,13 @@
 #include <string>
 #include "Job.h"
 
+
+/*
+REMAINING TO-DO:
+-Figure out why priority queue is acting funny for SJN algo
+-Clean-up
+*/
+
 using namespace std;
 
 void populateJobVectorAndQueueFromFile(vector<Job>& jobVector, priority_queue<pair<int,int>>& jobArrivalQueue);
@@ -29,7 +36,7 @@ int main() {
 	//second int - Represents job list position
 
 	priority_queue<pair<int, int>> waitingJobsQueue;
-	//first int - Represents priority
+	//first int - Represents execution time
 	//second int - Represents job list position
 	//All items will be auto-sorted based on priority
 
@@ -58,8 +65,7 @@ int main() {
 		if (!jobArrivalQueue.empty()) {
 			//Is there an arrival?
 			if (jobArrivalQueue.top().first == (-clock)) {
-				//Push priority value and list position into priorityJobsQueue
-				waitingJobsQueue.push({ jobVector[jobArrivalQueue.top().second].getPriority(), jobArrivalQueue.top().second });
+				waitingJobsQueue.push({ jobVector[jobArrivalQueue.top().second].getExecutionTime(), jobArrivalQueue.top().second });
 				//Pop from jobArrivalQueue
 				jobArrivalQueue.pop();
 			}
@@ -74,22 +80,6 @@ int main() {
 			waitingJobsQueue.pop();
 			//Update string queue...
 			jobOrder.push(currentWorkingJob.getJobName());
-		} //Otherwise, there is a working job...
-		else { //This portion should not exist for any non-preemptive algorithms...
-			//Check if queue is empty to avoid error trying to get front
-			if (!waitingJobsQueue.empty()) {
-				//Is there an item in the queue with a higher priority value?
-				if (currentWorkingJob.getPriority() < waitingJobsQueue.top().first) {
-					//...then update the currentWorkingJob in the vector, push "currentWorkingJob" back onto the queue, and replace current job with the higher priority job.
-					jobVector[currentWorkingJobIndex] = currentWorkingJob;
-					waitingJobsQueue.push({ currentWorkingJob.getPriority(), currentWorkingJobIndex });
-					currentWorkingJobIndex = waitingJobsQueue.top().second;
-					currentWorkingJob = jobVector[currentWorkingJobIndex];
-					waitingJobsQueue.pop();
-					//Update string queue...
-					jobOrder.push(currentWorkingJob.getJobName());
-				}
-			}
 		}
 
 		//Work on current job
@@ -110,7 +100,7 @@ int main() {
 			done = true;
 	}
 
-	cout << "PRIORITY ALGORITHM" << endl;
+	cout << "SHORTEST JOB NEXT ALGORITHM" << endl;
 	printJobDataTable(jobVector);
 	cout << endl;
 	printJobOrder(jobOrder);
