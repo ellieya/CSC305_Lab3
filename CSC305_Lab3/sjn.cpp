@@ -10,9 +10,6 @@ using namespace std;
 
 void populateJobVectorAndQueueFromFile(vector<Job>& jobVector, priority_queue<pair<int,int>>& jobArrivalQueue);
 
-//For debugging
-void printPriorityQueue(priority_queue<pair<int, int>> jobArrivalQueue, vector<Job> jobVector);
-
 //Final outputs
 void printJobDataTable(vector<Job> jobVector);
 void printJobOrder(queue<string> jobOrder);
@@ -24,10 +21,12 @@ int main() {
 
 	vector<Job> jobVector;
 	priority_queue<pair<int, int>> jobArrivalQueue;
+	//All jobs will be stuffed in this queue right after jobVector is populated, and it will be ordered according to negated arrival time.
 	//first int - Represents negated arrival time
 	//second int - Represents job vector position
 
 	priority_queue<pair<int, int>> waitingJobsQueue;
+	//Jobs will be stuffed into this queue as they arrive based on current clock time
 	//first int - Represents "true" execution time
 	//second int - Represents job vector position
 	//All items will be auto-sorted based on execution time
@@ -65,6 +64,8 @@ int main() {
 			waitingJobsQueue.pop();
 			//Update string queue...
 			jobOrder.push(currentWorkingJob.getJobName());
+			//Update start time of program...
+			currentWorkingJob.setStartTime(clock);
 		}
 
 		//Work on current job
@@ -124,9 +125,17 @@ void populateJobVectorAndQueueFromFile(vector<Job>& jobVector, priority_queue<pa
 
 void printJobDataTable(vector<Job> jobVector) {
 	int sum = 0;
-	cout << "NAME\tARRIVE\tPRIOR\tEXEC\tTA" << endl;
+	cout << "NAME\tARRIVE\tPRIOR\tSTART\tEXEC\tTERM\tTA" << endl;
 	for (int i = 0; i < jobVector.size(); i++) {
-		cout << jobVector[i].getJobName() << "\t" << jobVector[i].getArrivalTime() << "\t" << jobVector[i].getPriority() << "\t" << jobVector[i].getExecutionTime() << "\t" << jobVector[i].getTurnaroundTime() << endl;
+		cout << jobVector[i].getJobName() << "\t"
+			<< jobVector[i].getArrivalTime() << "\t"
+			<< jobVector[i].getPriority() << "\t"
+			<< jobVector[i].getStartTime() << "\t"
+			<< jobVector[i].getExecutionTime() << "\t"
+			<< jobVector[i].getTerminationTime() << "\t"
+			<< jobVector[i].getTurnaroundTime() << endl;
+
+
 		sum += jobVector[i].getTurnaroundTime();
 	}
 

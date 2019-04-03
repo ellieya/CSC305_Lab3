@@ -9,6 +9,8 @@ class Job {
 	int remainingExecutionTime;
 	bool jobComplete; //1 = job completed, 0 = need to execute
 	int turnaroundTime;
+	int terminationTime;
+	int startTime;
 
 
 	//The following three values are used to circumvent priorityQueue's sorting quirks and ensures that jobs
@@ -19,7 +21,7 @@ class Job {
 	static int count;
 		//count keeps track of total # of jobs
 
-	void calculateTurnaroundTime(int);
+	void calculateTurnaroundTime();
 
 public:
 	Job();
@@ -36,10 +38,13 @@ public:
 	//POST: remainingExecutionTime -= 1. If remainingExecutionTime = 0, jobComplete flag = true. Additionally, calculates TA time.
 
 	int getTurnaroundTime();
+	int getTerminationTime();
+	void setStartTime(int);
+	int getStartTime();
 	bool isJobComplete();
 };
 
-void Job::calculateTurnaroundTime(int terminationTime) {
+void Job::calculateTurnaroundTime() {
 	turnaroundTime = terminationTime - arrivalTime;
 }
 
@@ -90,12 +95,25 @@ void Job::decrRemainingExecutionTime(int currentTime) {
 
 	if (remainingExecutionTime == 0) {
 		jobComplete = true;
-		calculateTurnaroundTime(currentTime+1); //Sending over termination time. Must be fixed by + 1 because that is true termination time.
+		terminationTime = currentTime + 1;
+		calculateTurnaroundTime(); //Sending over termination time. Must be fixed by + 1 because that is true termination time.
 	}
 }
 
 int Job::getTurnaroundTime() {
 	return turnaroundTime;
+}
+
+int Job::getTerminationTime() {
+	return terminationTime;
+}
+
+void Job::setStartTime(int startTime) {
+	this->startTime = startTime;
+}
+
+int Job::getStartTime() {
+	return startTime;
 }
 
 bool Job::isJobComplete() {

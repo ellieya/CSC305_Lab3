@@ -121,7 +121,7 @@
     <Text Include="input_file.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="priority.cpp" />
+    <ClCompile Include="sjn.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
