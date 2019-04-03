@@ -1,4 +1,3 @@
-﻿  sjn.cpp
-c:\users\khleys\source\repos\csc305_lab3\csc305_lab3\sjn.cpp(135): warning C4018: '<': signed/unsigned mismatch
-c:\users\khleys\source\repos\csc305_lab3\csc305_lab3\sjn.cpp(151): warning C4018: '<': signed/unsigned mismatch
+﻿  priority.cpp
+c:\users\khleys\source\repos\csc305_lab3\csc305_lab3\priority.cpp(126): warning C4018: '<': signed/unsigned mismatch
   CSC305_Lab3.vcxproj -> C:\Users\Khleys\source\repos\CSC305_Lab3\Debug\CSC305_Lab3.exe

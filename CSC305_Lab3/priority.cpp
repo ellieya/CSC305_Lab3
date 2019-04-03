@@ -10,10 +10,6 @@ using namespace std;
 
 void populateJobVectorAndQueueFromFile(vector<Job>& jobVector, priority_queue<pair<int,int>>& jobArrivalQueue);
 
-//For debugging
-void printJobVector(vector<Job> jobVector);
-void printPriorityQueue(priority_queue<pair<int, int>> jobArrivalQueue, vector<Job> jobVector);
-
 //Final outputs
 void printJobDataTable(vector<Job> jobVector);
 void printJobOrder(queue<string> jobOrder);
@@ -26,11 +22,11 @@ int main() {
 	vector<Job> jobVector;
 	priority_queue<pair<int, int>> jobArrivalQueue;
 	//first int - Represents negated arrival time
-	//second int - Represents job list position
+	//second int - Represents job vector position
 
 	priority_queue<pair<int, int>> waitingJobsQueue;
-	//first int - Represents priority
-	//second int - Represents job list position
+	//first int - Represents "true" priority
+	//second int - Represents job vector position
 	//All items will be auto-sorted based on priority
 
 	queue<string> jobOrder;
@@ -46,20 +42,13 @@ int main() {
 	//When -arrivalTime = jobArrivalQueue.second, push onto priorityqueue
 	while (!done) {
 
-		/* DEBUGGING */
-		//cout << "Clock: " << clock << ". ";
-		//if (workingJob) {
-		//	cout << "Current Job: " << currentWorkingJob.getJobName() << ". Time left: " << currentWorkingJob.getRemainingExecutionTime() << ".";
-		//}
-		//cout << endl;
-
 		/* ARRIVAL */
 		//Check if queue is empty to avoid error trying to get front
 		if (!jobArrivalQueue.empty()) {
 			//Is there an arrival?
 			if (jobArrivalQueue.top().first == (-clock)) {
 				//Push priority value and list position into priorityJobsQueue
-				waitingJobsQueue.push({ jobVector[jobArrivalQueue.top().second].getPriority(), jobArrivalQueue.top().second });
+				waitingJobsQueue.push({ jobVector[jobArrivalQueue.top().second].getTruePriority(), jobArrivalQueue.top().second });
 				//Pop from jobArrivalQueue
 				jobArrivalQueue.pop();
 			}
@@ -75,22 +64,6 @@ int main() {
 			//Update string queue...
 			jobOrder.push(currentWorkingJob.getJobName());
 		} //Otherwise, there is a working job...
-		else { //This portion should not exist for any non-preemptive algorithms...
-			//Check if queue is empty to avoid error trying to get front
-			if (!waitingJobsQueue.empty()) {
-				//Is there an item in the queue with a higher priority value?
-				if (currentWorkingJob.getPriority() < waitingJobsQueue.top().first) {
-					//...then update the currentWorkingJob in the vector, push "currentWorkingJob" back onto the queue, and replace current job with the higher priority job.
-					jobVector[currentWorkingJobIndex] = currentWorkingJob;
-					waitingJobsQueue.push({ currentWorkingJob.getPriority(), currentWorkingJobIndex });
-					currentWorkingJobIndex = waitingJobsQueue.top().second;
-					currentWorkingJob = jobVector[currentWorkingJobIndex];
-					waitingJobsQueue.pop();
-					//Update string queue...
-					jobOrder.push(currentWorkingJob.getJobName());
-				}
-			}
-		}
 
 		//Work on current job
 		currentWorkingJob.decrRemainingExecutionTime(clock);
@@ -147,26 +120,11 @@ void populateJobVectorAndQueueFromFile(vector<Job>& jobVector, priority_queue<pa
 	}
 }
 
-void printJobVector(vector<Job> jobList)
-{
-	for (int i = 0; i < jobList.size(); i++) {
-		cout << jobList[i].getJobName() << endl;
-	}
-}
-
-void printPriorityQueue(priority_queue<pair<int, int>> jobArrivalQueue, vector<Job> jobVector)
-{
-	while (!jobArrivalQueue.empty()) {
-		cout << jobArrivalQueue.top().first << " " << jobVector[jobArrivalQueue.top().second].getJobName() << endl;
-		jobArrivalQueue.pop();
-	}
-}
-
 void printJobDataTable(vector<Job> jobVector) {
 	int sum = 0;
-	cout << "NAME\tTA" << endl;
+	cout << "NAME\tARRIVE\tPRIOR\tEXEC\tTA" << endl;
 	for (int i = 0; i < jobVector.size(); i++) {
-		cout << jobVector[i].getJobName() << "\t" << jobVector[i].getTurnaroundTime() << endl;
+		cout << jobVector[i].getJobName() << "\t" << jobVector[i].getArrivalTime() << "\t" << jobVector[i].getPriority() << "\t" << jobVector[i].getExecutionTime() << "\t" << jobVector[i].getTurnaroundTime() << endl;
 		sum += jobVector[i].getTurnaroundTime();
 	}
 

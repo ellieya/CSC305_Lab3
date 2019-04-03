@@ -6,19 +6,11 @@
 #include <string>
 #include "Job.h"
 
-
-/*
-REMAINING TO-DO:
--Figure out why priority queue is acting funny for SJN algo
--Clean-up
-*/
-
 using namespace std;
 
 void populateJobVectorAndQueueFromFile(vector<Job>& jobVector, priority_queue<pair<int,int>>& jobArrivalQueue);
 
 //For debugging
-void printJobVector(vector<Job> jobVector);
 void printPriorityQueue(priority_queue<pair<int, int>> jobArrivalQueue, vector<Job> jobVector);
 
 //Final outputs
@@ -33,12 +25,12 @@ int main() {
 	vector<Job> jobVector;
 	priority_queue<pair<int, int>> jobArrivalQueue;
 	//first int - Represents negated arrival time
-	//second int - Represents job list position
+	//second int - Represents job vector position
 
 	priority_queue<pair<int, int>> waitingJobsQueue;
-	//first int - Represents execution time
-	//second int - Represents job list position
-	//All items will be auto-sorted based on priority
+	//first int - Represents "true" execution time
+	//second int - Represents job vector position
+	//All items will be auto-sorted based on execution time
 
 	queue<string> jobOrder;
 	//A queue of job names, pushed in the order they were processed.
@@ -53,19 +45,12 @@ int main() {
 	//When -arrivalTime = jobArrivalQueue.second, push onto priorityqueue
 	while (!done) {
 
-		/* DEBUGGING */
-		//cout << "Clock: " << clock << ". ";
-		//if (workingJob) {
-		//	cout << "Current Job: " << currentWorkingJob.getJobName() << ". Time left: " << currentWorkingJob.getRemainingExecutionTime() << ".";
-		//}
-		//cout << endl;
-
 		/* ARRIVAL */
 		//Check if queue is empty to avoid error trying to get front
 		if (!jobArrivalQueue.empty()) {
 			//Is there an arrival?
 			if (jobArrivalQueue.top().first == (-clock)) {
-				waitingJobsQueue.push({ jobVector[jobArrivalQueue.top().second].getExecutionTime(), jobArrivalQueue.top().second });
+				waitingJobsQueue.push({ (-(jobVector[jobArrivalQueue.top().second].getTrueExecutionTime())), jobArrivalQueue.top().second });
 				//Pop from jobArrivalQueue
 				jobArrivalQueue.pop();
 			}
@@ -137,26 +122,11 @@ void populateJobVectorAndQueueFromFile(vector<Job>& jobVector, priority_queue<pa
 	}
 }
 
-void printJobVector(vector<Job> jobList)
-{
-	for (int i = 0; i < jobList.size(); i++) {
-		cout << jobList[i].getJobName() << endl;
-	}
-}
-
-void printPriorityQueue(priority_queue<pair<int, int>> jobArrivalQueue, vector<Job> jobVector)
-{
-	while (!jobArrivalQueue.empty()) {
-		cout << jobArrivalQueue.top().first << " " << jobVector[jobArrivalQueue.top().second].getJobName() << endl;
-		jobArrivalQueue.pop();
-	}
-}
-
 void printJobDataTable(vector<Job> jobVector) {
 	int sum = 0;
-	cout << "NAME\tTA" << endl;
+	cout << "NAME\tARRIVE\tPRIOR\tEXEC\tTA" << endl;
 	for (int i = 0; i < jobVector.size(); i++) {
-		cout << jobVector[i].getJobName() << "\t" << jobVector[i].getTurnaroundTime() << endl;
+		cout << jobVector[i].getJobName() << "\t" << jobVector[i].getArrivalTime() << "\t" << jobVector[i].getPriority() << "\t" << jobVector[i].getExecutionTime() << "\t" << jobVector[i].getTurnaroundTime() << endl;
 		sum += jobVector[i].getTurnaroundTime();
 	}
 

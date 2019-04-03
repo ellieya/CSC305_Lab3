@@ -10,9 +10,6 @@ using namespace std;
 
 void populateJobVectorAndQueueFromFile(vector<Job>& jobVector, priority_queue<pair<int,int>>& jobArrivalQueue);
 
-//For debugging
-void printJobVector(vector<Job> jobVector);
-
 //Final outputs
 void printJobDataTable(vector<Job> jobVector);
 void printJobOrder(queue<string> jobOrder);
@@ -25,10 +22,10 @@ int main() {
 	vector<Job> jobVector;
 	priority_queue<pair<int, int>> jobArrivalQueue;
 	//first int - Represents negated arrival time
-	//second int - Represents job list position
+	//second int - Represents job vector position
 
 	queue<int> waitingJobsQueue;
-	//int represents job list position
+	//int represents job vector position
 
 	queue<string> jobOrder;
 	//A queue of job names, pushed in the order they were processed.
@@ -40,16 +37,8 @@ int main() {
 
 	populateJobVectorAndQueueFromFile(jobVector, jobArrivalQueue);
 
-	//When -arrivalTime = jobArrivalQueue.second, push onto priorityqueue
+	//When -arrivalTime = jobArrivalQueue.second, push onto queue
 	while (!done) {
-
-		/* DEBUGGING */
-		//cout << "Clock: " << clock << ". ";
-		//if (workingJob) {
-		//	cout << "Current Job: " << currentWorkingJob.getJobName() << ". Time left: " << currentWorkingJob.getRemainingExecutionTime() << ".";
-		//}
-		//cout << endl;
-
 		/* ARRIVAL */
 		//Check if queue is empty to avoid error trying to get front
 		if (!jobArrivalQueue.empty()) {
@@ -128,18 +117,11 @@ void populateJobVectorAndQueueFromFile(vector<Job>& jobVector, priority_queue<pa
 	}
 }
 
-void printJobVector(vector<Job> jobList)
-{
-	for (int i = 0; i < jobList.size(); i++) {
-		cout << jobList[i].getJobName() << endl;
-	}
-}
-
 void printJobDataTable(vector<Job> jobVector) {
 	int sum = 0;
-	cout << "NAME\tTA" << endl;
+	cout << "NAME\tARRIVE\tPRIOR\tEXEC\tTA" << endl;
 	for (int i = 0; i < jobVector.size(); i++) {
-		cout << jobVector[i].getJobName() << "\t" << jobVector[i].getTurnaroundTime() << endl;
+		cout << jobVector[i].getJobName() << "\t" << jobVector[i].getArrivalTime() << "\t" << jobVector[i].getPriority() << "\t" << jobVector[i].getExecutionTime() << "\t" << jobVector[i].getTurnaroundTime() << endl;
 		sum += jobVector[i].getTurnaroundTime();
 	}
 
